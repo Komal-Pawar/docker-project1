@@ -1,11 +1,9 @@
 from django.contrib import admin  # noqa
-from . import models
-
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-#
-# # Define a new User admin
-# class UserAdmin(BaseUserAdmin):
+
+#  Define a new User admin
+#   class UserAdmin(BaseUserAdmin):
 #     ordering = ("id",)
 #     list_display = ("email", "name")
 
