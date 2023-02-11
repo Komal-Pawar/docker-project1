@@ -1,11 +1,16 @@
 """Tests the user API
+
 # Endpoints
-- `/user/create`
+
+- `/api/user/create`
 - `POST`: To create new user
-- `/user/token/`
+
+- `/api/user/token/`
 - `POST`: To get token
+
 - `/user/me`
 - `PUT/PATCH`: To modify user data
+
 """
 
 from django.test import TestCase
@@ -31,8 +36,8 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_success(self):
         """
-        Test creating user is successful (/user/create)
-        """
+       Test creating user is successful (/user/create)
+       """
 
         payload = {
             "email": "test@example.com",
@@ -45,10 +50,10 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_short_password(self):
         """
-        Test creating user is successful (/user/create)
-        """
-        payload = {"email": "test@example.com",
-                   "password": "pwd", "name": "Test Name"}
+       Test creating user is successful (/user/create)
+       """
+
+        payload = {"email": "test@example.com", "password": "pwd", "name": "Test Name"}
         res = self.client.post("/api/user/create/", payload)
         self.assertEqual(res.status_code, 400)
 
@@ -70,8 +75,10 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_for_user(self):
         """Test generates token for valid user credentials
-        /api/user/token
-        """
+
+       /api/user/token
+
+       """
 
         payload = {
             "email": "test@example.com",
@@ -83,3 +90,42 @@ class PublicUserApiTests(TestCase):
         res = self.client.post("/api/user/token/", payload)
         self.assertIn("token", res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_retrive_user_unauthorized(self):
+        """Test authentication is required for the user"""
+
+        res = self.client.get("/api/user/me/")
+        breakpoint()
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class PrivateUserApiTests(TestCase):
+    """Test API requests that require authentication"""
+
+    @staticmethod
+    def create_user(**params):
+        """returns user from whichever default user model"""
+
+        return get_user_model().objects.create_user(**params)
+
+    def setUp(self) -> None:
+        self.user = self.create_user(
+            email="test@example.com",
+            password="pasword@213",
+            name="Test name"
+        )
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    def test_retrive_user_profile(self):
+        """Test retrieving user information with valid token"""
+
+        res = self.client.get("/api/user/me/")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_update_user_profile(self):
+        """Test updating the user profile for an authenticate user"""
+
+        payload = {"name": "updated name", "password": "password@321"}
+        res = self.client.patch("/api/user/me/", payload)
+        self.assertEqual(self.user.name, payload.get("name"))
