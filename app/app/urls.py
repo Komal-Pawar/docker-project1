@@ -1,5 +1,4 @@
 """app URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
 Examples:
@@ -15,20 +14,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
 )
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     # TODO (TOPIC - how to start using `drf-spectacular`) - Refer
-    # https://drf-spectacular.readthedocs.io/en/latest/readme.html
-    # #take-it-for-a-spin
-    path('api/schema/', SpectacularAPIView.as_view(), name="api-schema"),
+    # https://drf-spectacular.readthedocs.io/en/latest/readme.html#take-it-for-a-spin
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
-        'api/docs/',
-        SpectacularSwaggerView.as_view(url_name='api-schema'),
-        name='api-docs',
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="api-schema"),
+        name="api-docs",
     ),
     path("api/user/", include("user.urls")),
+    path("api/jobtitle/", include("job.urls")),
 ]

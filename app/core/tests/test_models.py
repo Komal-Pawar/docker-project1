@@ -76,7 +76,7 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_staff)
 
     def test_create_job_title(self):
-        """Test creating new job title is successful"""
+        """Test creating new jobs title is successful"""
 
         user = get_user_model().objects.create_user(
             "test@example.com",
@@ -84,7 +84,7 @@ class ModelTests(TestCase):
         )
         portal = models.Portal.objects.create(
             name="naukri.com",
-            description="famous job portal in India"
+            description="famous jobs portal in India"
         )
         job_description = models.JobDescription.objects.create(
             role="To build backend microservices",

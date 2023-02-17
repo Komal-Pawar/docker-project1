@@ -17,7 +17,7 @@ from django.contrib.auth.models import (
 """
 How to customize default django user model and authentication?
 
-Refer -
+Refer - 
 https://docs.djangoproject.com/en/4.1/topics/auth/customizing
 
 REFER FULL EXAMPLE HERE -
@@ -28,8 +28,6 @@ additional notes ::
 
 
 """
-
-
 ###############################################################
 
 
@@ -39,15 +37,15 @@ class UserManager(BaseUserManager):
     def create_user(self, email: str, password: str = None, **extra_fields):
         """
 
-       Args:
-           email: will be new default instead of `username`
-           password: we will be using `set_password` method to encrypt password
-           **extra_fields: using this arbitrary keyword args option to
-                       accomodate any additional user fields in future
+        Args:
+            email: will be new default instead of `username`
+            password: we will be using `set_password` method to encrypt password
+            **extra_fields: using this arbitrary keyword args option to
+                        accomodate any additional user fields in future
 
-       Returns:
+        Returns:
 
-       """
+        """
 
         if not email:
             raise ValueError("Email field can NOT be blank")
@@ -72,17 +70,17 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email=None, password=None, **extra_fields):
         """
-       Whenever we call `python manage.py createsuperuser`, django looks for
-       this method.
+        Whenever we call `python manage.py createsuperuser`, django looks for
+        this method.
 
-       Args:
-           email:
-           password:
-           **extra_fields:
+        Args:
+            email:
+            password:
+            **extra_fields:
 
-       Returns:
+        Returns:
 
-       """
+        """
 
         user = self.create_user(email, password)
         user.is_superuser = True
@@ -125,13 +123,13 @@ class JobDescription(models.Model):
 
 class JobTitle(models.Model):
     """
-   JobTitle will have association with many portals
+    JobTitle will have association with many portals
 
-   `JobTitle` <--> `User` (one-to-many relationship)
-   `JobTitle` <--> `Portal`   (one-to-many relationship)
-   `JobTitle`  <--> `JobDescription` (one-to-one relationship)
+    `JobTitle` <--> `User` (one-to-many relationship)
+    `JobTitle` <--> `Portal`   (one-to-many relationship)
+    `JobTitle`  <--> `JobDescription` (one-to-one relationship)
 
-   """
+    """
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
